@@ -5,7 +5,7 @@
   <title>JS Drum Kit</title>
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body id="body">
 
 
   <div class="keys">
@@ -58,6 +58,26 @@
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
 <script>
+  document.addEventListener('keypress', logKey);
+  function logKey(e){
+    let kc = e.keyCode;
+    if (kc > 76) kc = e.keyCode-32;
+    let audio = document.querySelector(`audio[data-key="${kc}"]`);
+    let key = document.querySelector(`.key[data-key="${kc}"]`);
+
+    if (!audio) return null;
+    audio.currentTime = 0;
+    audio.play();
+    key.classList.add('playing');
+  }
+
+  function removeTransition(e){
+    if (e.propertyName !== 'transform') return;
+    this.classList.remove('playing');
+  }
+
+  const keys = document.querySelectorAll('.key');
+  keys.forEach(key => key.addEventListener('transitionend', removeTransition))
 
 </script>
 
